@@ -1,4 +1,4 @@
-#encoding=utf-8
+# coding=utf-8
 __auther__ = 'ya'
 
 from selenium.webdriver.support.ui import WebDriverWait
