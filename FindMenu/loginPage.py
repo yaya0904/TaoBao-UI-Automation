@@ -6,8 +6,8 @@ from selenium.webdriver.common.by import By
 
 class Loginpage(basePage.Base):
     userName_loc = (By.ID, 'fm-login-id')
-    passWord_loc = (By.ID, 'm-login-password')
-    loginButton_loc = (By.XPATH, '//*[@id="login-form"]/div[4]/button')
+    passWord_loc = (By.ID, 'fm-login-password')
+    loginButton_loc = (By.CSS_SELECTOR, '.fm-btn')
 
     def input_username(self, username):
         self.find_element(*self.userName_loc).send_key(username)
