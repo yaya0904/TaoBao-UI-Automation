@@ -5,5 +5,12 @@ from FindMenu import basePage
 from selenium.webdriver.common.by import By
 
 class Main(basePage.Base):
-    loginbutton_loc = (By.CSS_SELECTOR, '[href="https://login.taobao.com/member/login.jhtml?f=top&redirectURL=https%3A%2F%2Fwww.taobao.com%2F"]')
-    userprofile_loc = (By.XPATH, '//*[@id="J_SiteNavLogin"]/div[1]/div[2]/a')
+    loginbutton_loc = (By.XPATH, 'a[href*="https://login.taobao.com/member/login.jhtml?"]')
+    userprofile_loc = (By.XPATH, "a[class*='site-nav-login-info-nick']")
+    exituser_loc = (By.XPATH, "a[href*='//login.taobao.com/member/logout.jhtml?']")
+
+    def clickloginMenu(self):
+        self.driver.find_element(*self.loginbutton_loc).click()
+
+    def clickexitButton(self):
+        self.driver.find_element(*self.exituser_loc).click()

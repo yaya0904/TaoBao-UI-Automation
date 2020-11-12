@@ -16,4 +16,4 @@ class Loginpage(basePage.Base):
         self.find_element(*self.passWord_loc).send_key(password)
 
     def click_loginbutton(self):
-        self.find_element(*self.loginButton_loc).Click()
+        self.find_element(*self.loginButton_loc).click()
