@@ -14,7 +14,7 @@ class Login(object):
         self.login = loginPage.Loginpage(self.driver)
         self.main = mainPage.Main(self.driver)
 
-    def login_User(self, userName, password, result):
+    def login_User(self, userName, password):
         try:
             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.main.loginbutton_loc))
             self.main.clickloginMenu()
@@ -28,6 +28,7 @@ class Login(object):
                 print('---login failed----')
         except AssertionError as e:
             return e
+            assert False
 
     def logout_User(self):
         try:
@@ -42,7 +43,7 @@ class Login(object):
 
     def is_login(self):
         try:
-            if self.driver.find_element_by_xpath(self.main.userprofile_loc).is_displayed()
+            if self.driver.find_element_by_xpath(self.main.userprofile_loc).is_displayed():
                 print("----User is login----")
             return True
         except:
