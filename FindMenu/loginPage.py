@@ -8,7 +8,7 @@ class Loginpage(basePage.Base):
     userName_loc = (By.ID, 'fm-login-id')
     passWord_loc = (By.ID, 'fm-login-password')
     loginButton_loc = (By.CSS_SELECTOR, '.fm-btn')
-    error_message_loc = (By.XPATH, "//*[@class='login-error-msg']")
+    error_message_path = "//*[@class='login-error-msg']"
 
     def input_username(self, username):
         self.find_element(*self.userName_loc).send_keys(username)

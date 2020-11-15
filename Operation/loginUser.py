@@ -14,7 +14,7 @@ class Login(object):
         self.login = loginPage.Loginpage(self.driver)
         self.main = mainPage.Main(self.driver)
 
-    def login_User(self, userName, passWord):
+    def login_User(self, userName, passWord, assertType):
         try:
             self.driver.maximize_window()
             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.main.loginbutton_loc))
@@ -23,18 +23,20 @@ class Login(object):
             self.login.input_username(userName)
             self.login.input_password(passWord)
             self.login.click_loginbutton()
-            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.main.userprofile_loc))
-            if self.driver.find_element_by_xpath(self.main.userprofile_path).text == userName:
-                print("----login successfully----")
+            if assertType == 'success':
+                WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.main.userprofile_loc))
+                if self.driver.find_element_by_xpath(self.main.userprofile_path).text == userName:
+                    print("----login successfully----")
             else:
-                print('---login failed----')
+                pass
         except AssertionError as e:
             return e
             assert False
 
     def logout_User(self):
         try:
-            action_chains.ActionChains(self.driver).move_to_element(self.main.userprofile_loc)
+            userlocation = self.driver.find_element(self.main.userprofile_loc)
+            action_chains.ActionChains(self.driver).move_to_element(userlocation).perform()
             self.main.clickexitButton()
             if self.main.loginbutton_loc.is_displayed():
                 print('----Logout successfully----')

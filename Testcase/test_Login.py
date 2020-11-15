@@ -32,13 +32,14 @@ class Login(unittest.TestCase):
                 WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.main.userprofile_loc))
                 user = self.driver.find_element_by_xpath(self.main.userprofile_path).text
                 assert assertionKey == user
+                print('------logined user is: %s------' %user)
                 print('-----Login user successfully, pass!-----')
-                self.loginOpe.logout_User()
+                #self.loginOpe.logout_User()
             elif login_Ornot == 'fail':
-                keyword = self.driver.find_element_by_xpath(self.loginpage.error_message_loc).text
-                print('------logined user is: %s------'%keyword)
-                assert keyword == assertionKey
-                print('--------login failed, pass %s-------' %keyword)
+                print('-------assertionKey: %s-------'%assertionKey)
+                errorMessage = self.driver.find_element_by_xpath(self.loginpage.error_message_path).text
+                assert errorMessage == assertionKey
+                print('--------login failed, pass %s-------' %errorMessage)
         except AssertionError as e:
             return e
             assert False
@@ -47,17 +48,18 @@ class Login(unittest.TestCase):
     def test_Login(self, data):
         try:
             casenum = str(data['num'])
-            username = data['username']
-            password = data['password']
-            run_ornot = data['run']
-            if run_ornot == '0':
+            username = str(data['username'])
+            password = str(data['password'])
+            run_ornot = int(data['run'])
+            loginresult = str(data['login_result'])
+            if run_ornot == 0:
                 print('--------No need to run this case: %s, just pass it -------'%casenum)
                 return
             else:
                 print('-------start to test %s--------'%casenum)
                 if self.loginOpe.is_login():
                     self.loginOpe.logout_User()
-                self.loginOpe.login_User(username, password)
+                self.loginOpe.login_User(username, password, loginresult)
                 self.assert_check(data['login_result'], data['keywords'])
         except AssertionError as e:
             return e
