@@ -1,3 +1,6 @@
+# coding=utf-8
+__auther__ = 'ya'
+
 from FindMenu import loginPage, mainPage
 from Operation import loginUser
 from selenium import webdriver
@@ -8,9 +11,10 @@ import unittest
 import ddt
 import sys
 from utility import excel
+import logging
 
 path = sys.path[0]
-ex = excel.ExcelUtil(path + r'/Case/case_login.csv', 'login for different account')
+ex = excel.ExcelUtil(path + r'/Case/case_login.xls', 'different login')
 
 @ddt.ddt
 class Login(unittest.TestCase):
@@ -18,21 +22,23 @@ class Login(unittest.TestCase):
         self.driver = webdriver.Chrome(r'/Users/yaya/Desktop/ChromeDriver/chromedriver')
         self.driver.get('https://www.taobao.com')
         self.loginOpe = loginUser.Login(self.driver)
-        self.mainpage = mainPage.Main(self.driver)
+        self.main = mainPage.Main(self.driver)
         self.loginpage = loginPage.Loginpage(self.driver)
 
-    def assert_check(self, login_ornot, assertionKey):
+    def assert_check(self, login_Ornot, assertionKey):
         try:
             time.sleep(1)
-            if login_ornot == 'success':
-                WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.mainpage.userprofile_loc).display())
-                user = self.driver.find_element_by_xpath("a[class*='site-nav-login-info-nick']")
+            if login_Ornot == 'success':
+                WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.main.userprofile_loc))
+                user = self.driver.find_element_by_xpath(self.main.userprofile_path).text
                 assert assertionKey == user
                 print('-----Login user successfully, pass!-----')
-            elif login_ornot == 'fail':
-                keyword = self.loginpage.error_message_lco.text()
+                self.loginOpe.logout_User()
+            elif login_Ornot == 'fail':
+                keyword = self.driver.find_element_by_xpath(self.loginpage.error_message_loc).text
+                print('------logined user is: %s------'%keyword)
                 assert keyword == assertionKey
-                print('--------login failed, pass %s-------'%keyword)
+                print('--------login failed, pass %s-------' %keyword)
         except AssertionError as e:
             return e
             assert False
@@ -40,19 +46,24 @@ class Login(unittest.TestCase):
     @ddt.data(*ex.next())
     def test_Login(self, data):
         try:
-            testNum = data['case num']
-            username = data['userName']
+            casenum = str(data['num'])
+            username = data['username']
             password = data['password']
-            if self.loginOpe.is_login():
-                self.loginOpe.logout_User()
-            self.loginOpe.login_User(username, password)
-            self.assert_check(data['login_result'], data['keywords'])
+            run_ornot = data['run']
+            if run_ornot == '0':
+                print('--------No need to run this case: %s, just pass it -------'%casenum)
+                return
+            else:
+                print('-------start to test %s--------'%casenum)
+                if self.loginOpe.is_login():
+                    self.loginOpe.logout_User()
+                self.loginOpe.login_User(username, password)
+                self.assert_check(data['login_result'], data['keywords'])
         except AssertionError as e:
             return e
             assert False
 
     def tearDown(self):
-        self.loginOpe.logout_User()
         self.driver.quit()
         print('--------------Finish this case!-----------')
 

@@ -11,10 +11,10 @@ class Loginpage(basePage.Base):
     error_message_loc = (By.XPATH, "//*[@class='login-error-msg']")
 
     def input_username(self, username):
-        self.find_element(*self.userName_loc).send_key(username)
+        self.find_element(*self.userName_loc).send_keys(username)
 
     def input_password(self, password):
-        self.find_element(*self.passWord_loc).send_key(password)
+        self.find_element(*self.passWord_loc).send_keys(password)
 
     def click_loginbutton(self):
         self.find_element(*self.loginButton_loc).click()

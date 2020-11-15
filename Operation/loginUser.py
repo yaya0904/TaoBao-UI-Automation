@@ -1,7 +1,7 @@
 # coding=utf-8
 __auther__ = 'ya'
 
-from FindMenu import basePage, loginPage, mainPage
+from FindMenu import loginPage, mainPage
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from selenium.webdriver.support.ui import WebDriverWait
@@ -14,15 +14,17 @@ class Login(object):
         self.login = loginPage.Loginpage(self.driver)
         self.main = mainPage.Main(self.driver)
 
-    def login_User(self, userName, password):
+    def login_User(self, userName, passWord):
         try:
+            self.driver.maximize_window()
             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.main.loginbutton_loc))
             self.main.clickloginMenu()
             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.login.userName_loc))
             self.login.input_username(userName)
-            self.login.input_password(password)
+            self.login.input_password(passWord)
             self.login.click_loginbutton()
-            if self.main.userprofile_loc.text() == userName:
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.main.userprofile_loc))
+            if self.driver.find_element_by_xpath(self.main.userprofile_path).text == userName:
                 print("----login successfully----")
             else:
                 print('---login failed----')
@@ -32,7 +34,7 @@ class Login(object):
 
     def logout_User(self):
         try:
-            self.driver.move_to_element(self.main.userprofile_loc)
+            action_chains.ActionChains(self.driver).move_to_element(self.main.userprofile_loc)
             self.main.clickexitButton()
             if self.main.loginbutton_loc.is_displayed():
                 print('----Logout successfully----')
@@ -40,9 +42,11 @@ class Login(object):
         except:
             print('----logout failed----')
             return False
+            assert False
 
     def is_login(self):
         try:
+            #time.sleep(2)
             if self.driver.find_element_by_xpath(self.main.userprofile_loc).is_displayed():
                 print("----User is login----")
             return True
