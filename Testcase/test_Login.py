@@ -10,8 +10,7 @@ import time
 import unittest
 import ddt
 import sys
-from utility import excel
-import logging
+from utility import excel, HTMLTestRunner
 
 path = sys.path[0]
 ex = excel.ExcelUtil(path + r'/Case/case_login.xls', 'different login')
@@ -19,6 +18,7 @@ ex = excel.ExcelUtil(path + r'/Case/case_login.xls', 'different login')
 @ddt.ddt
 class Login(unittest.TestCase):
     def setUp(self):
+        self.resultpath = '/Users/yaya/Desktop/TaoBao UI automation/screenshot'
         self.driver = webdriver.Chrome(r'/Users/yaya/Desktop/ChromeDriver/chromedriver')
         self.driver.get('https://www.taobao.com')
         self.loginOpe = loginUser.Login(self.driver)
@@ -71,4 +71,8 @@ class Login(unittest.TestCase):
 
 if __name__ == '__main__':
     suit = unittest.TestLoader().loadTestsFromTestCase(Login)
+    result = '/Users/yaya/Desktop/TaoBao UI automation/testresult/login_result.html'
+    fb = open(result, 'wb')
+    runner = HTMLTestRunner.HTMLTestRunner(stream=fb, title="Login_TestResult", description="Login_TestResult")
     unittest.TextTestRunner(verbosity=2).run(suit)
+    fb.close()
