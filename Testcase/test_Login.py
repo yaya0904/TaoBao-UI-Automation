@@ -12,6 +12,7 @@ import ddt
 import sys
 from utility import excel, HTMLTestRunner
 from selenium.webdriver import ChromeOptions
+import os
 
 path = sys.path[0]
 ex = excel.ExcelUtil(path + r'/Case/case_login.xls', 'different login')
@@ -20,7 +21,7 @@ ex = excel.ExcelUtil(path + r'/Case/case_login.xls', 'different login')
 class Login(unittest.TestCase):
     def setUp(self):
         self.resultpath = '/Users/yaya/Desktop/TaoBao UI automation/screenshot'
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome(r'/Users/yaya/Desktop/ChromeDriver/chromedriver')
         self.driver.get('https://www.taobao.com')
         self.loginOpe = loginUser.Login(self.driver)
         self.main = mainPage.Main(self.driver)
@@ -58,7 +59,7 @@ class Login(unittest.TestCase):
                 return
             else:
                 print('-------start to test %s--------'%casenum)
-                ChromeOptions.add_experimental_option('excludeSwitches'['enable-automation'])
+                # ChromeOptions.add_experimental_option('excludeSwitches'['enable-automation'])
                 if self.loginOpe.is_login():
                     self.loginOpe.logout_User()
                 self.loginOpe.login_User(username, password, loginresult)

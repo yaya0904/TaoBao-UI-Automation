@@ -23,6 +23,12 @@ class Login(object):
             self.login.input_username(userName)
             self.login.input_password(passWord)
             self.login.click_loginbutton()
+            time.sleep(3)
+            if self.login.auth_scrollbar().is_displayed():
+                self.login.drop_scroll()
+                self.login.click_loginbutton()
+            else:
+                pass
             if assertType == 'success':
                 WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(self.main.userprofile_loc))
                 if self.driver.find_element_by_xpath(self.main.userprofile_path).text == userName:
