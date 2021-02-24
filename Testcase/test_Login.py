@@ -10,7 +10,7 @@ import time
 import unittest
 import ddt
 import sys
-from utility import excel, HTMLTestRunner
+from utility import excel, HTMLTestRunner, logger
 from selenium.webdriver import ChromeOptions
 import os
 
@@ -36,6 +36,7 @@ class Login(unittest.TestCase):
                 assert assertionKey == user
                 print('------logined user is: %s------' %user)
                 print('-----Login user successfully, pass!-----')
+                logger.Log().info('------------login successfully! %s---------' %user)
                 #self.loginOpe.logout_User()
             elif login_Ornot == 'fail':
                 print('-------assertionKey: %s-------'%assertionKey)
@@ -44,6 +45,7 @@ class Login(unittest.TestCase):
                 print('--------login failed, pass %s-------' %errorMessage)
         except AssertionError as e:
             return e
+            logger.Log().info('-------Case failed: %s-----', e)
             assert False
 
     @ddt.data(*ex.next())
@@ -66,6 +68,7 @@ class Login(unittest.TestCase):
                 self.assert_check(data['login_result'], data['keywords'])
         except AssertionError as e:
             return e
+            logger.Log.info("------Case failed! %s------" %e)
             assert False
 
     def tearDown(self):
